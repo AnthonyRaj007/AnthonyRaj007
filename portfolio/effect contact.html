@@ -1,0 +1,1158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Contact Me - Get In Touch</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdn.jsdelivr.net/gh/devicons/devicon@v2.15.1/devicon.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" integrity="sha512-Fo3rlalHpgZ4F/k2a4x1E7N3Lg4pXl/J5v0L22J/3+6N5F5n2E4M5A5P4B1c/lD5x1I1x2F3G1Q8g3T0S9H4A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+     integrity="sha256-p4NxAoCcTO9ZmBC9L7wYhYd0zT0t2u0B5mzlFwdXyL8="
+     crossorigin=""/>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.10.4/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.10.4/ScrollTrigger.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.10.4/Draggable.min.js"></script>
+
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400..900&family=Share+Tech+Mono&display=swap');
+
+        :root {
+            --primary-glow: #00e0ff; /* Electric Blue */
+            --secondary-glow: #ff00ff; /* Magenta */
+            --tertiary-glow: #8a2be2; /* Violet */
+            --text-color: #e8e8e8;
+            --background-start: #0a0a20;
+            --background-mid: #1a0a30;
+            --background-end: #0f0f25;
+            --glass-bg: rgba(255, 255, 255, 0.05); /* Lighter, more subtle */
+            --glass-border: rgba(255, 255, 255, 0.1);
+            --accent-green: #00ff88; /* Neon Green */
+            --accent-orange: #ffaa00; /* Bright Orange */
+        }
+
+        body {
+            margin: 0;
+            overflow-x: hidden;
+            font-family: 'Orbitron', sans-serif;
+            background: linear-gradient(135deg, var(--background-start), var(--background-mid), var(--background-end));
+            color: var(--text-color);
+            cursor: none;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            position: relative;
+            scroll-behavior: smooth; /* For smooth scrolling to sections */
+        }
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+            background: radial-gradient(circle at top left, rgba(0, 224, 255, 0.1) 0%, transparent 40%),
+                        radial-gradient(circle at bottom right, rgba(255, 0, 255, 0.1) 0%, transparent 40%);
+        }
+
+        #bg-3d {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: -2;
+            opacity: 0.8;
+            filter: brightness(1.2); /* Make it brighter */
+        }
+
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.5rem 4rem;
+            background: rgba(0, 0, 0, 0.7); /* Darker, more solid */
+            backdrop-filter: blur(20px) saturate(180%); /* Stronger blur and saturation */
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
+            position: sticky;
+            top: 0;
+            z-index: 100; /* Higher z-index */
+            border-bottom: 1px solid var(--glass-border);
+            box-shadow: 0 6px 40px rgba(0, 0, 0, 0.4);
+            animation: navbarDrop 0.8s ease-out forwards;
+        }
+        @keyframes navbarDrop {
+            0% { transform: translateY(-100%); opacity: 0; }
+            100% { transform: translateY(0); opacity: 1; }
+        }
+
+        .navbar .logo {
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: var(--primary-glow);
+            text-shadow: 0 0 15px var(--primary-glow), 0 0 30px rgba(0, 224, 255, 0.6);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); /* Springy transition */
+            cursor: pointer;
+            position: relative;
+        }
+        .navbar .logo::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: var(--secondary-glow);
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform 0.4s ease-out;
+        }
+        .navbar .logo:hover {
+            transform: scale(1.08) rotate(-2deg);
+            color: var(--secondary-glow);
+            text-shadow: 0 0 20px var(--secondary-glow), 0 0 40px rgba(255, 0, 255, 0.7);
+        }
+        .navbar .logo:hover::after {
+            transform: scaleX(1);
+        }
+
+        .navbar ul {
+            list-style: none;
+            display: flex;
+            margin: 0;
+            padding: 0;
+        }
+        .navbar li {
+            margin-left: 40px;
+        }
+        .navbar a {
+            text-decoration: none;
+            color: var(--text-color);
+            font-weight: 500;
+            transition: 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            position: relative;
+            padding-bottom: 8px;
+            letter-spacing: 0.05em;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.05rem;
+        }
+        .navbar a::before {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 2px;
+            bottom: 0;
+            left: 0;
+            background: var(--accent-green);
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        .navbar a::after {
+            content: '';
+            position: absolute;
+            width: 0%;
+            height: 2px;
+            bottom: -4px;
+            left: 0;
+            background: var(--accent-orange);
+            transition: width 0.4s ease-out;
+        }
+        .navbar a.active,
+        .navbar a:hover {
+            color: var(--primary-glow);
+            text-shadow: 0 0 10px var(--primary-glow), 0 0 20px rgba(0, 224, 255, 0.5);
+            transform: translateY(-3px);
+        }
+        .navbar a:hover::before {
+            transform: scaleX(1);
+        }
+        .navbar a.active::after,
+        .navbar a:hover::after {
+            width: 100%;
+        }
+
+        .menu-toggle {
+            display: none;
+            flex-direction: column;
+            cursor: pointer;
+            z-index: 101;
+        }
+        .menu-toggle div {
+            width: 35px;
+            height: 4px;
+            background: var(--primary-glow);
+            margin: 6px 0;
+            transition: 0.4s cubic-bezier(0.86, 0, 0.07, 1);
+            border-radius: 2px;
+        }
+        .menu-toggle.open .bar1 { transform: translateY(10px) rotate(45deg); background: var(--secondary-glow); }
+        .menu-toggle.open .bar2 { opacity: 0; }
+        .menu-toggle.open .bar3 { transform: translateY(-10px) rotate(-45deg); background: var(--secondary-glow); }
+
+        .cursor {
+            width: 30px;
+            height: 30px;
+            border: 3px solid var(--primary-glow);
+            background: rgba(0, 224, 255, 0.1);
+            border-radius: 50%;
+            box-shadow: 0 0 20px var(--primary-glow),
+                        0 0 40px rgba(0, 224, 255, 0.4),
+                        0 0 60px rgba(0, 224, 255, 0.2);
+            position: fixed;
+            transform: translate(-50%, -50%);
+            pointer-events: none;
+            z-index: 9999;
+            transition: transform 0.25s ease-out, background 0.3s ease, border 0.3s ease, box-shadow 0.3s ease;
+        }
+        .cursor.hovered {
+            transform: translate(-50%, -50%) scale(1.6);
+            border-color: var(--secondary-glow);
+            background: rgba(255, 0, 255, 0.1);
+            box-shadow: 0 0 20px var(--secondary-glow),
+                        0 0 40px rgba(255, 0, 255, 0.4),
+                        0 0 60px rgba(255, 0, 255, 0.2);
+        }
+        .cursor::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 6px;
+            height: 6px;
+            background-color: var(--primary-glow);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            opacity: 0.8;
+            transition: background-color 0.3s ease;
+        }
+        .cursor.hovered::after {
+            background-color: var(--secondary-glow);
+        }
+
+
+        main {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 4rem 1.5rem;
+            width: 100%;
+            position: relative;
+            z-index: 1;
+        }
+
+        .contact-container {
+            padding: 4rem;
+            border-radius: 2.5rem; /* Even more rounded */
+            background-color: var(--glass-bg);
+            backdrop-filter: blur(30px) saturate(250%); /* Even stronger glassmorphism */
+            -webkit-backdrop-filter: blur(30px) saturate(250%);
+            border: 1px solid var(--glass-border);
+            box-shadow: 0 40px 80px rgba(0, 0, 0, 0.7), inset 0 0 30px rgba(255, 255, 255, 0.08); /* Deeper shadow and inner glow */
+            max-width: 950px; /* Wider container */
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 2.5rem; /* More spacing */
+            animation: slideInUp 1s cubic-bezier(0.23, 1, 0.32, 1) forwards; /* Smoother, more impactful entrance */
+            opacity: 0;
+            transform: translateY(50px);
+        }
+        @keyframes slideInUp {
+            0% { opacity: 0; transform: translateY(50px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+
+        .contact-form label {
+            display: block;
+            margin-bottom: 0.8rem;
+            font-weight: 700;
+            color: var(--accent-green); /* Neon green for labels */
+            text-align: left;
+            font-size: 1.15rem;
+            letter-spacing: 0.03em;
+            text-shadow: 0 0 8px rgba(0, 255, 136, 0.4);
+        }
+
+        .contact-form input[type="text"],
+        .contact-form input[type="email"],
+        .contact-form textarea {
+            width: 100%;
+            padding: 1.1rem; /* More padding */
+            border-radius: 1rem; /* Even more rounded */
+            border: 1px solid var(--glass-border);
+            background-color: rgba(0, 0, 0, 0.5); /* Darker input background */
+            color: var(--text-color);
+            transition: all 0.4s ease-in-out;
+            font-size: 1.05rem;
+            font-family: 'Share Tech Mono', monospace;
+        }
+        .contact-form input::placeholder,
+        .contact-form textarea::placeholder {
+            color: rgba(255, 255, 255, 0.3);
+            font-family: 'Share Tech Mono', monospace;
+        }
+
+        .contact-form input[type="text"]:focus,
+        .contact-form input[type="email"]:focus,
+        .contact-form textarea:focus {
+            outline: none;
+            border-color: var(--secondary-glow);
+            background-color: rgba(0, 0, 0, 0.7); /* Even darker on focus */
+            box-shadow: 0 0 0 5px rgba(255, 0, 255, 0.3), 0 0 20px rgba(255, 0, 255, 0.4);
+            transform: scale(1.01);
+        }
+
+        .contact-form textarea {
+            min-height: 180px; /* Taller textarea */
+            resize: vertical;
+        }
+
+        .contact-form button {
+            background: linear-gradient(90deg, var(--tertiary-glow) 0%, var(--primary-glow) 100%);
+            color: white;
+            font-weight: bold;
+            padding: 1.2rem 3.5rem; /* Larger button */
+            border-radius: 9999px; /* Fully rounded */
+            margin-top: 3rem;
+            cursor: pointer;
+            transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1); /* Bouncy transition */
+            box-shadow: 0 10px 30px rgba(138, 43, 226, 0.5);
+            border: none;
+            font-size: 1.3rem;
+            letter-spacing: 0.1em;
+            font-family: 'Orbitron', sans-serif;
+            text-transform: uppercase;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .contact-form button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            transition: all 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+        }
+
+        .contact-form button:hover::before {
+            left: 100%;
+        }
+
+        .contact-form button:hover {
+            transform: translateY(-8px) scale(1.05); /* More pronounced hover effect */
+            background: linear-gradient(90deg, var(--secondary-glow) 0%, var(--accent-orange) 100%); /* Color shift on hover */
+            box-shadow: 0 15px 40px rgba(255, 0, 255, 0.7);
+            filter: brightness(1.2);
+        }
+
+        .contact-info {
+            text-align: center;
+            margin-top: 3rem;
+        }
+
+        .contact-info p {
+            margin-bottom: 1.2rem;
+            font-size: 1.25rem;
+            color: #d0d0d0;
+            line-height: 1.6;
+        }
+        .contact-info p i {
+            color: var(--accent-green); /* Neon green for icons */
+            margin-right: 0.8rem;
+            filter: drop-shadow(0 0 8px var(--accent-green));
+            transition: transform 0.3s ease;
+        }
+        .contact-info p:hover i {
+            transform: scale(1.1) rotate(5deg);
+        }
+
+        .contact-info a {
+            color: var(--accent-orange); /* Orange accent for links */
+            text-decoration: none;
+            transition: color 0.4s ease, text-shadow 0.4s ease, transform 0.3s ease;
+            text-shadow: 0 0 8px rgba(255, 170, 0, 0.3);
+            display: inline-block; /* For transform */
+        }
+
+        .contact-info a:hover {
+            color: var(--secondary-glow);
+            text-shadow: 0 0 12px var(--secondary-glow);
+            transform: translateY(-2px);
+        }
+
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 2.5rem; /* More spacing */
+            margin-top: 2.5rem;
+        }
+
+        .social-links a {
+            font-size: 3.5rem; /* Even larger icons */
+            color: var(--text-color);
+            transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+            filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.05));
+            position: relative;
+        }
+        .social-links a::after {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background: transparent;
+            box-shadow: 0 0 0px var(--primary-glow);
+            animation: none;
+            transition: box-shadow 0.5s ease;
+            top: 0;
+            left: 0;
+            z-index: -1;
+        }
+
+        .social-links a:hover {
+            color: var(--primary-glow);
+            transform: scale(1.25) rotate(-10deg); /* More dynamic hover */
+            filter: drop-shadow(0 0 20px var(--primary-glow));
+        }
+        .social-links a:hover::after {
+            box-shadow: 0 0 25px var(--primary-glow), 0 0 50px var(--primary-glow);
+            animation: socialPulse 1.5s infinite alternate;
+        }
+
+        @keyframes socialPulse {
+            0% { box-shadow: 0 0 25px var(--primary-glow), 0 0 50px var(--primary-glow); }
+            100% { box-shadow: 0 0 35px var(--secondary-glow), 0 0 70px var(--secondary-glow); }
+        }
+
+
+        .page-title {
+            font-family: 'Orbitron', sans-serif;
+            text-shadow: 0 0 25px var(--tertiary-glow), 0 0 50px rgba(138, 43, 226, 0.8);
+            animation: titleShiftGlow 3.5s infinite alternate;
+            font-size: 4.5rem; /* Even larger title */
+            line-height: 1.1;
+            margin-bottom: 4rem;
+            letter-spacing: 0.08em;
+            text-align: center;
+        }
+        .page-title .text-transparent {
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+        }
+        .page-title .from-cyan-400 {
+            background-image: linear-gradient(to right, var(--primary-glow), var(--accent-green));
+        }
+        .page-title .to-purple-500 {
+            background-image: linear-gradient(to right, var(--secondary-glow), var(--tertiary-glow));
+        }
+
+        @keyframes titleShiftGlow {
+            0% { text-shadow: 0 0 25px var(--tertiary-glow), 0 0 50px rgba(138, 43, 226, 0.8); }
+            50% { text-shadow: 0 0 35px var(--primary-glow), 0 0 60px rgba(0, 224, 255, 0.9); }
+            100% { text-shadow: 0 0 25px var(--secondary-glow), 0 0 50px rgba(255, 0, 255, 0.8); }
+        }
+
+        /* Map styling */
+        #mapid {
+            height: 500px; /* Taller map */
+            width: 100%;
+            border-radius: 1.5rem; /* More rounded corners */
+            margin-top: 2.5rem;
+            border: 2px solid var(--glass-border); /* Thicker border */
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4), inset 0 0 15px rgba(255, 255, 255, 0.05);
+            background-color: #1a1a1a;
+            position: relative;
+            overflow: hidden;
+        }
+        #mapid::before {
+            content: '';
+            position: absolute;
+            top: -10%;
+            left: -10%;
+            width: 120%;
+            height: 120%;
+            background: radial-gradient(circle, rgba(0, 255, 136, 0.1) 0%, transparent 40%),
+                        radial-gradient(circle at bottom right, rgba(255, 170, 0, 0.1) 0%, transparent 40%);
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        /* Leaflet map specific tweaks for dark theme */
+        .leaflet-container {
+            background-color: #1a1a1a !important; /* Dark background for map tiles */
+        }
+        .leaflet-control-zoom-in, .leaflet-control-zoom-out {
+            background-color: rgba(0, 0, 0, 0.8) !important;
+            color: var(--text-color) !important;
+            border: 1px solid var(--glass-border) !important;
+            border-radius: 50% !important;
+            width: 40px; height: 40px;
+            font-size: 1.5rem;
+            line-height: 36px;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+        .leaflet-control-zoom-in:hover, .leaflet-control-zoom-out:hover {
+            background-color: var(--primary-glow) !important;
+            color: black !important;
+            box-shadow: 0 0 15px var(--primary-glow);
+        }
+        .leaflet-control-attribution a {
+            color: var(--accent-orange) !important;
+            font-size: 0.9rem;
+        }
+        .leaflet-popup-content-wrapper {
+            background-color: rgba(0, 0, 0, 0.9) !important;
+            color: var(--text-color) !important;
+            border-radius: 1rem !important;
+            padding: 1.2rem !important;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.5);
+            border: 1px solid var(--primary-glow);
+        }
+        .leaflet-popup-tip {
+            background-color: rgba(0, 0, 0, 0.9) !important;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.5);
+        }
+        .custom-map-marker {
+            animation: pulse 1.5s infinite alternate !important;
+        }
+        @keyframes pulse {
+            0% { transform: scale(0.9); opacity: 0.7; }
+            100% { transform: scale(1.1); opacity: 1; }
+        }
+
+        footer {
+            background: rgba(0, 0, 0, 0.8); /* Even darker footer */
+            text-align: center;
+            padding: 2.5rem 1.5rem;
+            margin-top: auto;
+            border-top: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: 0 -8px 25px rgba(0, 0, 0, 0.3);
+            font-family: 'Share Tech Mono', monospace;
+        }
+        footer p {
+            color: #b0b0b0;
+            margin-bottom: 1.5rem;
+            font-size: 0.9rem;
+            letter-spacing: 0.02em;
+        }
+        footer a {
+            color: var(--primary-glow);
+            text-decoration: none;
+            margin: 0 18px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+        footer a::after {
+            content: '';
+            position: absolute;
+            width: 0%;
+            height: 1px;
+            bottom: -3px;
+            left: 0;
+            background: var(--secondary-glow);
+            transition: width 0.3s ease-out;
+        }
+        footer a:hover {
+            color: var(--secondary-glow);
+            text-shadow: 0 0 10px var(--secondary-glow);
+        }
+        footer a:hover::after {
+            width: 100%;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1024px) {
+            .navbar {
+                padding: 1.2rem 2.5rem;
+            }
+            .navbar .logo {
+                font-size: 1.6rem;
+            }
+            .navbar ul {
+                margin-left: 20px;
+            }
+            .navbar a {
+                font-size: 0.95rem;
+            }
+            .page-title {
+                font-size: 3.8rem;
+            }
+            .contact-container {
+                padding: 3rem;
+            }
+            .contact-form label {
+                font-size: 1.1rem;
+            }
+            .contact-form input, .contact-form textarea {
+                font-size: 1rem;
+            }
+            .contact-form button {
+                padding: 1rem 3rem;
+                font-size: 1.15rem;
+            }
+            .contact-info p {
+                font-size: 1.15rem;
+            }
+            .social-links a {
+                font-size: 3rem;
+            }
+            #mapid {
+                height: 450px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .navbar {
+                padding: 1rem 1.5rem;
+            }
+            .navbar .logo {
+                font-size: 1.4rem;
+            }
+            .navbar ul {
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                flex-direction: column;
+                background: rgba(0, 0, 30, 0.97);
+                backdrop-filter: blur(20px);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                transform: translateX(100%);
+                transition: transform 0.6s cubic-bezier(0.86, 0, 0.07, 1); /* Slower, more dramatic slide */
+            }
+            .navbar ul.show {
+                transform: translateX(0%);
+            }
+            .navbar li {
+                margin: 25px 0;
+                opacity: 0;
+                transform: translateY(30px);
+                animation: slideInLinkMobile 0.6s cubic-bezier(0.23, 1, 0.32, 1) forwards;
+            }
+            .navbar ul.show li:nth-child(1) { animation-delay: 0.15s; }
+            .navbar ul.show li:nth-child(2) { animation-delay: 0.25s; }
+            .navbar ul.show li:nth-child(3) { animation-delay: 0.35s; }
+            .navbar ul.show li:nth-child(4) { animation-delay: 0.45s; }
+            .navbar ul.show li:nth-child(5) { animation-delay: 0.55s; }
+            .navbar ul.show li:nth-child(6) { animation-delay: 0.65s; }
+            .navbar ul.show li:nth-child(7) { animation-delay: 0.75s; }
+
+            @keyframes slideInLinkMobile {
+                0% { opacity: 0; transform: translateY(30px); }
+                100% { opacity: 1; transform: translateY(0); }
+            }
+
+            .menu-toggle {
+                display: flex;
+            }
+            main {
+                padding: 2.5rem 1rem;
+            }
+            .contact-container {
+                padding: 2rem;
+                gap: 1.5rem;
+            }
+            .page-title {
+                font-size: 2.8rem;
+                margin-bottom: 2.5rem;
+            }
+            .contact-form button {
+                padding: 0.9rem 2.5rem;
+                font-size: 1.05rem;
+            }
+            .social-links {
+                gap: 2rem;
+            }
+            .social-links a {
+                font-size: 2.8rem;
+            }
+            #mapid {
+                height: 350px;
+                margin-top: 2rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .navbar .logo {
+                font-size: 1.1rem;
+            }
+            .navbar {
+                padding: 0.8rem 1rem;
+            }
+            .page-title {
+                font-size: 2rem;
+                letter-spacing: 0.05em;
+            }
+            .contact-container {
+                padding: 1.5rem;
+            }
+            .contact-form label {
+                font-size: 1rem;
+            }
+            .contact-form input, .contact-form textarea {
+                padding: 0.9rem;
+                font-size: 0.9rem;
+            }
+            .contact-form button {
+                padding: 0.8rem 2rem;
+                font-size: 0.95rem;
+            }
+            .contact-info p {
+                font-size: 1rem;
+            }
+            .social-links a {
+                font-size: 2.2rem;
+                gap: 1.5rem;
+            }
+            #mapid {
+                height: 280px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <canvas id="bg-3d"></canvas>
+
+    <div class="cursor" id="cursor"></div>
+
+    <header class="navbar">
+        <div class="logo" id="logo">
+            <span style="color: var(--primary-glow);">CYBER</span><span style="color: var(--secondary-glow);">CONTACT</span>
+        </div>
+        <div class="menu-toggle" id="menu-toggle">
+            <div class="bar1"></div>
+            <div class="bar2"></div>
+            <div class="bar3"></div>
+        </div>
+        <nav>
+            <ul id="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="about.html">About</a></li>
+                <li><a href="skills.html">Skills</a></li>
+                <li><a href="education.html">Education</a></li>
+                <li><a href="project.html">Work</a></li>
+                <li><a href="experience.html">Experience</a></li>
+                <li><a class="active" href="contact.html">Contact</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <div class="max-w-6xl w-full">
+            <h2 class="font-extrabold relative z-10 page-title">
+                <i class="fas fa-hand-sparkles text-accent-green mr-4 animate-pulse"></i>
+                <span class="text-transparent from-cyan-400 to-green-500">INITIATE</span>
+                <span class="text-transparent to-purple-500 from-pink-400 ml-4">COMMUNICATION</span>
+            </h2>
+
+            <div class="contact-container" id="contact-section">
+                <p class="text-center text-xl text-gray-300 mb-6 font-light leading-relaxed animate-in-stagger">
+                    Ready to hack into a new project or just exchange data packets? Send me a secure transmission.
+                </p>
+
+                <form class="contact-form" action="mailto:your-email@example.com" method="post" enctype="text/plain">
+                    <div class="mb-5 animate-in-stagger">
+                        <label for="name"><i class="fas fa-user-astronaut mr-2"></i> Your Designated Name</label>
+                        <input type="text" id="name" name="name" placeholder="Agent X-99" required>
+                    </div>
+                    <div class="mb-5 animate-in-stagger">
+                        <label for="email"><i class="fas fa-at mr-2"></i> Your Secure Channel Email</label>
+                        <input type="email" id="email" name="email" placeholder="agent.x99@cybercorp.com" required>
+                    </div>
+                    <div class="mb-5 animate-in-stagger">
+                        <label for="subject"><i class="fas fa-bookmark mr-2"></i> Transmission Subject</label>
+                        <input type="text" id="subject" name="subject" placeholder="Project Quantum Leap Inquiry">
+                    </div>
+                    <div class="mb-8 animate-in-stagger">
+                        <label for="message"><i class="fas fa-comment-dots mr-2"></i> Your Encrypted Message</label>
+                        <textarea id="message" name="message" placeholder="My deepest apologies for the intrusion, but I have a critical mission to discuss..." rows="7" required></textarea>
+                    </div>
+                    <button type="submit" class="self-center animate-in-stagger" id="submit-button">SEND TRANSMISSION</button>
+                </form>
+
+                <h3 class="text-center text-3xl font-bold mt-12 mb-8 text-white" style="text-shadow: 0 0 15px var(--tertiary-glow);">ACCESS GEOSPATIAL DATA</h3>
+                <div id="mapid" class="animate-in-stagger"></div>
+
+                <div class="contact-info animate-in-stagger">
+                    <p><i class="fas fa-phone-alt"></i> +91 123 456 7890 (Direct Neural Interface)</p>
+                    <p><i class="fas fa-envelope"></i> <a href="mailto:your-email@example.com">your-email@example.com</a> (Data Stream Protocol)</p>
+                    <p><i class="fas fa-map-marker-alt"></i> Neo-Bengaluru, Cyber-District 7, India</p>
+
+                    <div class="social-links">
+                        <a href="#" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn"><i class="fab fa-linkedin"></i></a>
+                        <a href="#" target="_blank" rel="noopener noreferrer" aria-label="GitHub"><i class="fab fa-github"></i></a>
+                        <a href="#" target="_blank" rel="noopener noreferrer" aria-label="X (Twitter)"><i class="fab fa-x-twitter"></i></a>
+                        <a href="#" target="_blank" rel="noopener noreferrer" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; 2025 Anthony Raj. All Rights Reserved. // Cybernetic Protocol v7.2 Activated.</p>
+        <div>
+            <a href="#">Privacy Matrix</a>
+            <a href="#">System Integrity</a>
+            <a href="#">Diagnostic Support</a>
+        </div>
+    </footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+     integrity="sha256-20nQCchB9co0qIjGwZNAOvsyJzADgcIXA6tKf/S8o7k="
+     crossorigin=""></script>
+    <script>
+        // --- Custom Cursor Logic ---
+        const cursor = document.getElementById("cursor");
+        document.addEventListener("mousemove", (e) => {
+            cursor.style.left = `${e.clientX}px`;
+            cursor.style.top = `${e.clientY}px`;
+        });
+
+        const hoverTargets = document.querySelectorAll("button, a, input, textarea, .logo, .menu-toggle");
+        hoverTargets.forEach(target => {
+            target.addEventListener("mouseenter", () => {
+                cursor.classList.add("hovered");
+            });
+            target.addEventListener("mouseleave", () => {
+                cursor.classList.remove("hovered");
+            });
+        });
+
+        // --- Three.js 3D Background - Hyper-Dynamic Starfield & Particle Nexus ---
+        let scene, camera, renderer, stars, particles, nebulaSpheres;
+        let mouseX = 0, mouseY = 0;
+        const windowHalfX = window.innerWidth / 2;
+        const windowHalfY = window.innerHeight / 2;
+
+        function initThreeJS() {
+            scene = new THREE.Scene();
+            camera = new THREE.PerspectiveCamera(70, window.innerWidth / window.innerHeight, 0.1, 2000);
+            camera.position.z = 10; // Slightly further back
+
+            renderer = new THREE.WebGLRenderer({ canvas: document.getElementById('bg-3d'), alpha: true, antialias: true });
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            renderer.setPixelRatio(window.devicePixelRatio);
+
+            // Stars
+            const starGeometry = new THREE.BufferGeometry();
+            const starPositions = [];
+            const starColors = [];
+            const numStars = 2000; // Even more stars
+
+            for (let i = 0; i < numStars; i++) {
+                starPositions.push((Math.random() - 0.5) * 200); // Wider spread
+                starPositions.push((Math.random() - 0.5) * 200);
+                starPositions.push((Math.random() - 0.5) * 300 - 150); // Deeper field
+
+                const hue = Math.random(); // 0 to 1 for interpolation
+                const color = new THREE.Color();
+                color.setHSL(hue, 0.8 + Math.random() * 0.2, 0.7 + Math.random() * 0.2); // Vibrant, bright stars
+                starColors.push(color.r, color.g, color.b);
+            }
+
+            starGeometry.setAttribute('position', new THREE.Float32BufferAttribute(starPositions, 3));
+            starGeometry.setAttribute('color', new THREE.Float32BufferAttribute(starColors, 3));
+
+            const starMaterial = new THREE.PointsMaterial({
+                size: 0.15, // Smaller points for a more refined look
+                vertexColors: true, // Use colors from geometry
+                blending: THREE.AdditiveBlending, // For glowing effect
+                transparent: true,
+                sizeAttenuation: true // Stars appear smaller further away
+            });
+            stars = new THREE.Points(starGeometry, starMaterial);
+            scene.add(stars);
+
+            // Swirling Particles (foreground/midground)
+            const particleGeometry = new THREE.BufferGeometry();
+            const particlePositions = [];
+            const numParticles = 800; // A layer of smaller, faster particles
+
+            for (let i = 0; i < numParticles; i++) {
+                particlePositions.push((Math.random() - 0.5) * 100);
+                particlePositions.push((Math.random() - 0.5) * 100);
+                particlePositions.push((Math.random() - 0.5) * 150 - 50); // Mid-range
+            }
+            particleGeometry.setAttribute('position', new THREE.Float32BufferAttribute(particlePositions, 3));
+
+            const particleMaterial = new THREE.PointsMaterial({
+                color: new THREE.Color(0x00ff88), // Neon green for particles
+                size: 0.2,
+                blending: THREE.AdditiveBlending,
+                transparent: true,
+                opacity: 0.6,
+                sizeAttenuation: true
+            });
+            particles = new THREE.Points(particleGeometry, particleMaterial);
+            scene.add(particles);
+
+            // Large, slow-moving Nebulae Spheres (background)
+            nebulaSpheres = [];
+            const numNebulae = 6;
+            const nebulaColors = [0x00e0ff, 0xff00ff, 0x8a2be2, 0x00ff88, 0xffaa00]; // Vibrant colors from palette
+
+            for (let i = 0; i < numNebulae; i++) {
+                const color = new THREE.Color(nebulaColors[Math.floor(Math.random() * nebulaColors.length)]);
+                const geometry = new THREE.SphereGeometry(15 + Math.random() * 10, 32, 32); // Varying sizes
+                const material = new THREE.MeshBasicMaterial({
+                    color: color,
+                    transparent: true,
+                    opacity: 0.08 + Math.random() * 0.08, // Very subtle opacity
+                    blending: THREE.AdditiveBlending,
+                    side: THREE.BackSide // Render inside the sphere
+                });
+                const nebula = new THREE.Mesh(geometry, material);
+                nebula.position.set(
+                    (Math.random() - 0.5) * 300,
+                    (Math.random() - 0.5) * 300,
+                    (Math.random() - 0.5) * 400 - 300 // Far back
+                );
+                nebula.velocityZ = (Math.random() * 0.01 + 0.005); // Very slow movement
+                nebula.rotationSpeed = (Math.random() * 0.0005 + 0.0002);
+                scene.add(nebula);
+                nebulaSpheres.push(nebula);
+            }
+
+            document.addEventListener('mousemove', (event) => {
+                mouseX = (event.clientX - windowHalfX) / 400; // Less sensitive for smoother camera
+                mouseY = (event.clientY - windowHalfY) / 400;
+            });
+        }
+
+        function animateThreeJS() {
+            requestAnimationFrame(animateThreeJS);
+
+            // Smooth camera rotation based on mouse
+            camera.rotation.y += (mouseX - camera.rotation.y) * 0.02;
+            camera.rotation.x += (-mouseY - camera.rotation.x) * 0.02;
+
+            // Animate Stars
+            const starPositions = stars.geometry.attributes.position.array;
+            for (let i = 0; i < starPositions.length; i += 3) {
+                starPositions[i + 2] += 0.4; // Star speed
+                if (starPositions[i + 2] > camera.position.z + 10) {
+                    starPositions[i + 2] = camera.position.z - 290; // Reset far back
+                    starPositions[i] = (Math.random() - 0.5) * 200;
+                    starPositions[i + 1] = (Math.random() - 0.5) * 200;
+                }
+            }
+            stars.geometry.attributes.position.needsUpdate = true;
+
+            // Animate Particles
+            const particlePositions = particles.geometry.attributes.position.array;
+            for (let i = 0; i < particlePositions.length; i += 3) {
+                particlePositions[i + 0] += Math.sin(Date.now() * 0.00005 + i) * 0.05; // Swirling X
+                particlePositions[i + 1] += Math.cos(Date.now() * 0.00005 + i) * 0.05; // Swirling Y
+                particlePositions[i + 2] += 0.8; // Particle speed
+                if (particlePositions[i + 2] > camera.position.z + 5) {
+                    particlePositions[i + 2] = camera.position.z - 140; // Reset far back
+                    particlePositions[i] = (Math.random() - 0.5) * 100;
+                    particlePositions[i + 1] = (Math.random() - 0.5) * 100;
+                }
+            }
+            particles.geometry.attributes.position.needsUpdate = true;
+
+            // Animate Nebulae
+            nebulaSpheres.forEach(nebula => {
+                nebula.position.z += nebula.velocityZ;
+                if (nebula.position.z > camera.position.z + 50) {
+                    nebula.position.z = camera.position.z - 350; // Reset far back
+                    nebula.position.x = (Math.random() - 0.5) * 300;
+                    nebula.position.y = (Math.random() - 0.5) * 300;
+                }
+                nebula.rotation.y += nebula.rotationSpeed;
+                nebula.rotation.x += nebula.rotationSpeed / 2;
+            });
+
+            renderer.render(scene, camera);
+        }
+
+        // --- GSAP ScrollTrigger Animations ---
+        gsap.registerPlugin(ScrollTrigger, Draggable);
+
+        function setupGSAPAnimations() {
+            // Navbar entry
+            gsap.from(".navbar", { y: -100, opacity: 0, duration: 0.8, ease: "power3.out" });
+
+            // Page title animation
+            gsap.from(".page-title", {
+                y: 50,
+                opacity: 0,
+                scale: 0.9,
+                duration: 1.2,
+                ease: "elastic.out(1, 0.7)",
+                delay: 0.5
+            });
+
+            // Contact container slide in
+            gsap.from("#contact-section", {
+                y: 100,
+                opacity: 0,
+                duration: 1.2,
+                ease: "power3.out",
+                delay: 0.8
+            });
+
+            // Staggered animations for form elements, contact info, map, social links
+            gsap.from(".animate-in-stagger", {
+                y: 30,
+                opacity: 0,
+                stagger: 0.15, // Increased stagger for more pronounced effect
+                duration: 0.8,
+                ease: "back.out(1.7)",
+                scrollTrigger: {
+                    trigger: "#contact-section",
+                    start: "top 70%", // Start when contact section is 70% from top
+                    // markers: true, // Uncomment for debugging scroll triggers
+                    toggleActions: "play none none none"
+                }
+            });
+
+            // Button hover effect with GSAP
+            const submitButton = document.getElementById("submit-button");
+            if (submitButton) {
+                submitButton.addEventListener("mouseenter", () => {
+                    gsap.to(submitButton, {
+                        scale: 1.05,
+                        y: -5,
+                        boxShadow: "0 15px 40px rgba(255, 0, 255, 0.7)",
+                        duration: 0.3,
+                        ease: "power2.out"
+                    });
+                });
+                submitButton.addEventListener("mouseleave", () => {
+                    gsap.to(submitButton, {
+                        scale: 1,
+                        y: 0,
+                        boxShadow: "0 10px 30px rgba(138, 43, 226, 0.5)",
+                        duration: 0.3,
+                        ease: "power2.out"
+                    });
+                });
+            }
+
+            // Draggable effect for logo (just for fun, purely visual)
+            Draggable.create("#logo", {
+                type: "x,y",
+                bounds: "body",
+                edgeResistance: 0.65,
+                throwProps: true,
+                onPress: function() { gsap.to(this.target, { scale: 1.2, duration: 0.2 }); },
+                onRelease: function() { gsap.to(this.target, { scale: 1, duration: 0.2 }); }
+            });
+        }
+
+
+        // Toggle Mobile Menu
+        const menuToggle = document.getElementById('menu-toggle');
+        const navLinks = document.getElementById('nav-links');
+        menuToggle.addEventListener('click', () => {
+            navLinks.classList.toggle('show');
+            menuToggle.classList.toggle('open');
+            document.body.style.overflow = navLinks.classList.contains('show') ? 'hidden' : 'auto'; // Prevent scrolling when menu is open
+        });
+
+        navLinks.querySelectorAll('a').forEach(link => {
+            link.addEventListener('click', () => {
+                if (navLinks.classList.contains('show')) {
+                    navLinks.classList.remove('show');
+                    menuToggle.classList.remove('open');
+                    document.body.style.overflow = 'auto';
+                }
+            });
+        });
+
+        // --- Leaflet Map Initialization ---
+        let mymap;
+        function initializeMap() {
+            const mapContainer = document.getElementById('mapid');
+            if (mapContainer && !mymap) {
+                const userLatitude = 28.6139; // New Delhi, India
+                const userLongitude = 77.2090;
+
+                mymap = L.map('mapid', {
+                    zoomControl: false,
+                    attributionControl: false // Hide default attribution for custom one
+                }).setView([userLatitude, userLongitude], 15); // Zoomed in a bit more
+
+                // Custom dark tile layer
+                L.tileLayer('https://tiles.stadiamaps.com/tiles/alidade_smooth_dark/{z}/{x}/{y}{r}.png', {
+                    maxZoom: 20,
+                    attribution: '&copy; <a href="https://stadiamaps.com/" target="_blank">Stadia Maps</a> &copy; <a href="https://openmaptiles.org/" target="_blank">OpenMapTiles</a> &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+                    className: 'map-tiles-dark' // Add a class for potential CSS overrides
+                }).addTo(mymap);
+
+                // Add custom attribution control
+                L.control.attribution({
+                    position: 'bottomleft',
+                    prefix: 'Powered by <a href="https://leafletjs.com/" title="A JS library for interactive maps">Leaflet</a>'
+                }).addTo(mymap);
+
+                L.control.zoom({ position: 'bottomright' }).addTo(mymap);
+
+                // Custom glowing marker
+                const customIcon = L.divIcon({
+                    className: 'custom-map-marker',
+                    html: `<div style="background-color: var(--primary-glow); width: 28px; height: 28px; border-radius: 50%; border: 4px solid var(--secondary-glow); box-shadow: 0 0 18px var(--primary-glow), 0 0 30px var(--secondary-glow); animation: mapMarkerPulse 1.8s infinite alternate;"></div>`,
+                    iconSize: [36, 36],
+                    iconAnchor: [18, 18],
+                    popupAnchor: [0, -20]
+                });
+
+                L.marker([userLatitude, userLongitude], {icon: customIcon}).addTo(mymap)
+                    .bindPopup('<b style="color: var(--accent-green); font-family: \'Share Tech Mono\';">My Digital Nexus!</b><br>Neo-Bengaluru, Cyber-District 7, India.', {
+                        closeButton: false,
+                        className: 'custom-popup-style' // Add a class for custom popup styling
+                    })
+                    .openPopup();
+
+                // Custom CSS for map marker pulse (moved here for coherence)
+                const style = document.createElement('style');
+                style.innerHTML = `
+                    @keyframes mapMarkerPulse {
+                        0% { transform: scale(0.9); opacity: 0.7; box-shadow: 0 0 18px var(--primary-glow), 0 0 30px var(--secondary-glow); }
+                        100% { transform: scale(1.1); opacity: 1; box-shadow: 0 0 25px var(--primary-glow), 0 0 45px var(--secondary-glow); }
+                    }
+                `;
+                document.head.appendChild(style);
+            }
+        }
+
+
+        // Initialization on window load
+        window.onload = function () {
+            initThreeJS();
+            animateThreeJS();
+            initializeMap();
+            setupGSAPAnimations();
+        }
+
+        window.addEventListener('resize', () => {
+            if (camera && renderer) {
+                camera.aspect = window.innerWidth / window.innerHeight;
+                camera.updateProjectionMatrix();
+                renderer.setSize(window.innerWidth, window.innerHeight);
+            }
+            if (typeof mymap !== 'undefined') {
+                mymap.invalidateSize();
+            }
+        });
+    </script>
+</body>
+</html>

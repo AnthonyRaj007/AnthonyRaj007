@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Robot Assistant Enquiry Form - Dark & Dynamic</title>
+    <style>
+       
+
+      
+        /* --- Robot Icon with 3D Animation and Speech Bubble --- */
+        .robot-assistant {
+            position: fixed;
+            top: 50%;
+            right: 30px;
+            transform: translateY(-50%) rotateY(0deg) translateZ(0px); /* Initialize transform */
+            cursor: pointer;
+            z-index: 999;
+            perspective: 1200px;
+            transition: transform 0.6s cubic-bezier(0.36, 0.45, 0.63, 0.53);
+            animation: floatUpDown 3s infinite ease-in-out alternate; /* Floating animation */
+        }
+
+        @keyframes floatUpDown {
+            0% { transform: translateY(-50%) translateZ(0); }
+            50% { transform: translateY(-55%) translateZ(10px); } /* Move forward slightly */
+            100% { transform: translateY(-50%) translateZ(0); }
+        }
+
+        .robot-icon {
+            width: 90px;
+            height: auto;
+            transform-origin: center bottom;
+            transition: transform 0.6s cubic-bezier(0.36, 0.45, 0.63, 0.53);
+            filter: drop-shadow(0 0 15px #00bcd4); /* Initial glow */
+            animation: robotWiggle 2s infinite alternate, colorShift 8s infinite ease-in-out; /* Continuous wiggle + color shift */
+        }
+
+        @keyframes robotWiggle {
+            0% { transform: translateY(0) rotateZ(0deg); }
+            50% { transform: translateY(-5px) rotateZ(2deg); }
+            100% { transform: translateY(0) rotateZ(0deg); }
+        }
+
+        @keyframes colorShift {
+            0% { filter: drop-shadow(0 0 15px #00bcd4); }
+            33% { filter: drop-shadow(0 0 15px #ff416c); }
+            66% { filter: drop-shadow(0 0 15px #8e2de2); }
+            100% { filter: drop-shadow(0 0 15px #00bcd4); }
+        }
+
+        .robot-assistant:hover .robot-icon {
+            transform: translateY(-15px) rotateY(25deg) rotateZ(-8deg) scale(1.15); /* More dynamic hover */
+            filter: drop-shadow(0 0 25px #ff416c); /* More intense glow on hover */
+        }
+
+        .speech-bubble {
+            position: absolute;
+            right: 100%;
+            top: 50%;
+            transform: translateY(-50%);
+            background-color: #00bcd4; /* Initial teal */
+            color: white;
+            padding: 10px 15px;
+            border-radius: 10px;
+            margin-right: 15px;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease-in-out, visibility 0.3s ease-in-out, transform 0.3s ease-in-out, background-color 0.8s ease-in-out;
+            white-space: nowrap;
+            box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.4);
+            animation: bubbleColorShift 8s infinite ease-in-out; /* Bubble color shift */
+        }
+
+        @keyframes bubbleColorShift {
+            0% { background-color: #00bcd4; }
+            33% { background-color: #ff416c; }
+            66% { background-color: #8e2de2; }
+            100% { background-color: #00bcd4; }
+        }
+
+        .speech-bubble::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 100%;
+            margin-top: -5px;
+            border-width: 5px;
+            border-style: solid;
+            border-color: transparent transparent transparent #00bcd4; /* Initial teal */
+            transition: border-color 0.8s ease-in-out;
+            animation: bubbleArrowColorShift 8s infinite ease-in-out;
+        }
+         @keyframes bubbleArrowColorShift {
+            0% { border-color: transparent transparent transparent #00bcd4; }
+            33% { border-color: transparent transparent transparent #ff416c; }
+            66% { border-color: transparent transparent transparent #8e2de2; }
+            100% { border-color: transparent transparent transparent #00bcd4; }
+        }
+
+
+        .robot-assistant:hover .speech-bubble {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(-50%) translateX(-10px);
+        }
+
+        /* --- Modal Styles --- */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.7); /* More opaque dark background */
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        .modal-content {
+            background: linear-gradient(145deg, var(--dark-card) 0%, #1c1c3a 100%); /* Dark gradient for modal */
+            padding: 35px; /* Slightly more padding */
+            border-radius: 15px; /* More rounded corners */
+            box-shadow: 0 15px 30px rgba(0,0,0,0.5), inset 0 0 10px rgba(255,255,255,0.05); /* Deeper shadow and inner glow */
+            width: 100%;
+            max-width: 650px; /* Wider form */
+            position: relative;
+            max-height: 90vh;
+            overflow-y: auto;
+            transform-style: preserve-3d;
+            animation: modalOpen 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; /* Longer, more bouncy open */
+            opacity: 0;
+            border: 1px solid #3a3f6e; /* Subtle border */
+        }
+
+        @keyframes modalOpen {
+            from {
+                opacity: 0;
+                transform: translateY(-100px) scale(0.8) rotateX(-20deg) rotateY(10deg); /* More dramatic 3D entry */
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1) rotateX(0deg) rotateY(0deg);
+            }
+        }
+
+        .close-button {
+            color: #a7a7bb; /* Muted light close button color */
+            font-size: 35px; /* Larger close button */
+            font-weight: bold;
+            position: absolute;
+            top: 18px;
+            right: 25px;
+            cursor: pointer;
+            transition: color 0.3s ease-in-out, transform 0.3s ease-in-out;
+            text-shadow: 0 0 5px rgba(255,255,255,0.1);
+        }
+
+        .close-button:hover,
+        .close-button:focus {
+            color: #ff416c; /* Pink on hover */
+            text-decoration: none;
+            transform: rotate(180deg) scale(1.2); /* More pronounced rotation and grow */
+        }
+
+        /* --- Form Styles with enhanced effects --- */
+        .form-container {
+            padding-top: 20px;
+        }
+        .form-container h2 {
+            text-align: center;
+            color: #00bcd4; /* Teal for heading */
+            margin-bottom: 35px;
+            font-size: 2.8em; /* Larger heading */
+            font-weight: 700; /* Bolder heading */
+            text-shadow: 0 0 15px rgba(0, 188, 212, 0.6); /* Glow for heading */
+            position: relative;
+            animation: textFadeIn 1s cubic-bezier(0.23, 1, 0.32, 1) 0.3s forwards;
+            opacity: 0;
+            transform: translateY(-20px) rotateX(20deg); /* 3D effect for heading */
+            background: linear-gradient(45deg, #00bcd4, #8e2de2); /* Gradient text */
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        @keyframes textFadeIn {
+            to {
+                opacity: 1;
+                transform: translateY(0) rotateX(0deg);
+            }
+        }
+
+        .form-group {
+            margin-bottom: 25px; /* More space between groups */
+            position: relative;
+            animation: slideInUp 0.8s cubic-bezier(0.23, 1, 0.32, 1) forwards;
+            opacity: 0;
+            transform-style: preserve-3d; /* Enable 3D transforms for children */
+        }
+        /* Delay animations for each form group */
+        .form-group:nth-child(1) { animation-delay: 0.4s; }
+        .form-group:nth-child(2) { animation-delay: 0.5s; }
+        .form-group:nth-child(3) { animation-delay: 0.6s; }
+        .form-group:nth-child(4) { animation-delay: 0.7s; }
+        .form-group:nth-child(5) { animation-delay: 0.8s; }
+        .form-group:nth-child(6) { animation-delay: 0.9s; }
+
+
+        @keyframes slideInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px) rotateX(-15deg); /* Slide up with 3D rotation */
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) rotateX(0deg);
+            }
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 12px;
+            color: #e0f7fa;
+            font-weight: 600;
+            transition: color 0.3s ease-in-out;
+            transform: translateZ(10px); /* Pull label forward */
+        }
+        .form-group input,
+        .form-group textarea {
+            width: calc(100% - 24px); /* Account for padding */
+            padding: 14px;
+            border: 1px solid #3a3f6e;
+            border-radius: 10px;
+            font-size: 17px;
+            box-sizing: border-box;
+            transition: border-color 0.3s ease-in-out, box-shadow 0.3s ease-in-out, transform 0.2s ease-out, background-color 0.3s ease-in-out;
+            background-color: #2e305e; /* Darker input background */
+            color: #e0f7fa;
+            box-shadow: inset 0 2px 5px rgba(0,0,0,0.3); /* Inner shadow for depth */
+        }
+        .form-group input:focus,
+        .form-group textarea:focus {
+            border-color: #ff416c; /* Pink focus color */
+            outline: none;
+            box-shadow: 0 0 15px rgba(255, 65, 108, 0.4), inset 0 2px 5px rgba(0,0,0,0.3); /* More intense focus shadow */
+            transform: scale(1.01) translateZ(5px); /* Subtle grow and pull forward on focus */
+            background-color: #3f4277; /* Slightly lighter on focus */
+        }
+        .form-group textarea {
+            resize: vertical;
+            min-height: 150px; /* Taller textarea */
+        }
+        .form-group input::placeholder,
+        .form-group textarea::placeholder {
+            color: #a7a7bb;
+            transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out;
+        }
+        .form-group input:focus::placeholder,
+        .form-group textarea:focus::placeholder {
+            transform: translateX(8px); /* Slide placeholder on focus */
+            opacity: 0.6;
+        }
+
+        .form-group input.error,
+        .form-group textarea.error {
+            border-color: #d35050;
+            box-shadow: 0 0 10px rgba(255, 107, 107, 0.6), inset 0 2px 5px rgba(0,0,0,0.3);
+        }
+        .form-group .error-message {
+            color: #d35050;
+            font-size: 0.95em;
+            margin-top: 8px;
+            display: none;
+            animation: fadeIn 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94); /* Smooth fade in */
+            transform: translateZ(5px); /* Error message slightly forward */
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px) translateZ(0px); }
+            to { opacity: 1; transform: translateY(0) translateZ(5px); }
+        }
+        .form-group input.error + .error-message,
+        .form-group textarea.error + .error-message {
+            display: block;
+        }
+        .form-group button {
+            background: linear-gradient(90deg, #ff416c 0%, #8e2de2 100%); /* Gradient button */
+            color: white;
+            padding: 16px 30px; /* Larger button */
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 20px; /* Larger font */
+            width: 100%;
+            transition: background 0.3s ease-in-out, transform 0.2s ease-in-out, box-shadow 0.3s ease-in-out;
+            box-shadow: 0 6px 15px rgba(255, 65, 108, 0.4); /* Shadow matches gradient */
+            font-weight: 700;
+            letter-spacing: 1px; /* Spaced out text */
+            position: relative; /* For pseudo-element glow */
+            overflow: hidden;
+            z-index: 1;
+        }
+        .form-group button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: rgba(255,255,255,0.1);
+            transform: skewX(-30deg);
+            transition: 0.5s;
+            z-index: -1;
+        }
+        .form-group button:hover::before {
+            left: 100%;
+        }
+
+        .form-group button:hover {
+            background: linear-gradient(90deg, #8e2de2 0%, #ff416c 100%); /* Reverse gradient on hover */
+            transform: translateY(-5px) scale(1.03); /* More pronounced lift and grow */
+            box-shadow: 0 8px 20px rgba(142, 45, 226, 0.6); /* Deeper, purple-tinted shadow */
+        }
+
+        /* Media queries for responsiveness */
+        @media (max-width: 768px) {
+            .robot-assistant {
+                right: 15px;
+            }
+            .robot-icon {
+                width: 70px;
+            }
+            .speech-bubble {
+                font-size: 0.9em;
+                padding: 8px 12px;
+                margin-right: 10px;
+            }
+            .modal-content {
+                padding: 25px;
+                margin: 15px;
+                border-radius: 10px;
+            }
+            .form-container h2 {
+                font-size: 2.2em;
+                margin-bottom: 25px;
+            }
+            .form-group input,
+            .form-group textarea,
+            .form-group button {
+                font-size: 16px;
+                border-radius: 8px;
+            }
+             .form-group textarea {
+                min-height: 120px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="robot-assistant" id="openEnquiryForm">
+        <img src="https://assets.website-files.com/604533cfc85a0c325c00e62a/604533cfc85a0ce34000e704_robot-icon.png" alt="Robot Assistant" class="robot-icon">
+        <div class="speech-bubble">Need Help?</div>
+    </div>
+
+    <div id="enquiryModal" class="modal-overlay">
+        <div class="modal-content">
+            <span class="close-button" id="closeEnquiryForm">&times;</span>
+            <div class="form-container">
+                <h2>Get in Touch</h2>
+                <form id="enquiryForm">
+                    <div class="form-group">
+                        <label for="name">Your Name:</label>
+                        <input type="text" id="name" name="name" placeholder="Enter your name" required>
+                        <div class="error-message">Please enter your name.</div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="email">Your Email:</label>
+                        <input type="email" id="email" name="email" placeholder="Your email address" required>
+                        <div class="error-message">Please enter a valid email.</div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="phone">Phone Number (Optional):</label>
+                        <input type="tel" id="phone" name="phone" placeholder="Your phone number">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="subject">Subject:</label>
+                        <input type="text" id="subject" name="subject" value="General Enquiry" placeholder="Subject of your enquiry" required>
+                        <div class="error-message">Please enter a subject.</div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="message">Your Message:</label>
+                        <textarea id="message" name="message" rows="6" placeholder="Describe your enquiry here..." required></textarea>
+                        <div class="error-message">Please enter your message.</div>
+                    </div>
+
+                    <div class="form-group">
+                        <button type="submit">Send Message</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const enquiryModal = document.getElementById('enquiryModal');
+        const openButton = document.getElementById('openEnquiryForm');
+        const closeButton = document.getElementById('closeEnquiryForm');
+        const enquiryForm = document.getElementById('enquiryForm');
+        const formGroups = document.querySelectorAll('.form-group');
+
+        function openModal() {
+            enquiryModal.style.display = 'flex';
+            document.body.style.overflow = 'hidden';
+            // Reset animations for fresh entry on subsequent opens
+            formGroups.forEach(group => {
+                group.style.animation = 'none';
+                group.offsetHeight; /* Trigger reflow */
+                group.style.animation = null;
+            });
+            document.querySelector('.form-container h2').style.animation = 'none';
+            document.querySelector('.form-container h2').offsetHeight; /* Trigger reflow */
+            document.querySelector('.form-container h2').style.animation = null;
+        }
+
+        function closeModal() {
+            enquiryModal.style.display = 'none';
+            document.body.style.overflow = '';
+            enquiryForm.reset();
+            formGroups.forEach(group => {
+                const input = group.querySelector('input, textarea');
+                input.classList.remove('error');
+                const errorDiv = group.querySelector('.error-message');
+                if (errorDiv) {
+                    errorDiv.style.display = 'none';
+                    errorDiv.textContent = ''; // Reset error message content
+                }
+            });
+        }
+
+        openButton.addEventListener('click', (e) => {
+            e.preventDefault();
+            openModal();
+        });
+
+        closeButton.addEventListener('click', closeModal);
+
+        enquiryModal.addEventListener('click', (e) => {
+            if (e.target === enquiryModal) {
+                closeModal();
+            }
+        });
+
+        enquiryForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            let isValid = true;
+
+            formGroups.forEach(group => {
+                const input = group.querySelector('input, textarea');
+                const errorDiv = group.querySelector('.error-message');
+                
+                // Clear previous error state
+                input.classList.remove('error');
+                if (errorDiv) {
+                    errorDiv.style.display = 'none';
+                    errorDiv.textContent = ''; // Reset error message content
+                }
+
+                if (input.hasAttribute('required') && input.value.trim() === '') {
+                    input.classList.add('error');
+                    if (errorDiv) {
+                        errorDiv.textContent = `Please enter your ${input.id.replace(/([A-Z])/g, ' $1').toLowerCase()}.`; // Improves error message for 'name', 'email', etc.
+                        errorDiv.style.display = 'block';
+                    }
+                    isValid = false;
+                } else if (input.type === 'email' && input.value.trim() !== '') {
+                    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                    if (!emailPattern.test(input.value.trim())) {
+                        input.classList.add('error');
+                        if (errorDiv) {
+                            errorDiv.textContent = 'Please enter a valid email address.';
+                            errorDiv.style.display = 'block';
+                        }
+                        isValid = false;
+                    }
+                }
+            });
+
+            if (isValid) {
+                alert('Message sent successfully! (Note: This is a front-end simulation)');
+                closeModal();
+            }
+        });
+    </script>
+</body>
+</html>

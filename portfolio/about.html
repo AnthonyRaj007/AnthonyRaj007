@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Anthony Raj - About Me</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;600&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      cursor: none;
+    }
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(280deg, #000000, #040404, #040404, #040404, #000000);
+      color: white;
+      overflow-x: hidden;
+    }
+
+    
+.glow-text {
+      text-shadow: 0 0 5px rgba(54, 126, 160, 0.5),
+                   0 0 10px rgba(0, 47, 255, 0.6),
+                   0 0 15px rgba(0, 81, 255, 0.7),
+                   0 0 20px rgba(0, 81, 255, 0.7);
+                   animation: titleGlow 2s infinite alternate;
+    }
+    .glow-icon {
+      filter: drop-shadow(0 0 5px #ffea00)
+              drop-shadow(0 0 10px #ffea00)
+              drop-shadow(0 0 20px #ffea00);
+              animation: titleGlow 2s infinite alternate;
+
+    }
+
+    
+
+        @keyframes titleGlow {
+            0% { text-shadow: 0 0 10px rgba(129, 140, 248, 0.7), 0 0 20px rgba(79, 70, 229, 0.5); }
+            100% { text-shadow: 0 0 20px rgba(129, 140, 248, 1), 0 0 40px rgba(79, 70, 229, 0.8); }
+        }
+   .text-center {
+      padding: 30px 10px;
+      text-align: center;
+      font-size: 2.8rem;
+      font-weight: bold;
+      background: linear-gradient(90deg, #00f9ff, #ff00cc);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    } 
+
+    .navbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem 2rem;
+      background: rgb(60 93 87 / 35%);
+      backdrop-filter: blur(8px);
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+    .navbar .logo {
+      font-size: 1.6rem;
+      font-weight: bold;
+      color: #00ffe7;
+    }
+    .navbar ul {
+      list-style: none;
+      display: flex;
+    }
+    .navbar li {
+      margin-left: 20px;
+    }
+    .navbar a {
+      text-decoration: none;
+      color: #e0f7fa;
+      font-weight: 500;
+      transition: 0.3s;
+      border-bottom: 2px solid transparent;
+    }
+    .navbar a.active,
+    .navbar a:hover {
+      color: #e0f7fa;
+      border-color: #e0f7fa;
+    }
+
+    .menu-toggle {
+      display: none;
+      flex-direction: column;
+      cursor: pointer;
+    }
+    .menu-toggle div {
+      width: 25px;
+      height: 3px;
+      background: #00ffe7;
+      margin: 4px 0;
+      transition: 0.3s;
+    }
+
+    .container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 60px 20px;
+      flex-wrap: wrap;
+      z-index: 1;
+      position: relative;
+    }
+
+    .image-container {
+      
+      text-align: center;
+      margin: 4%;
+    }
+
+    .image-container img {
+      width: 320px;
+      border-radius: 20px;
+      box-shadow: 1px 1px 90px 1px rgb(0 255 255 / 96%);
+      transform: perspective(800px) rotateY(10deg);
+      transition: transform 0.4s ease, box-shadow 0.4s ease;
+    }
+
+    .image-container img:hover {
+      transform: perspective(800px) rotateY(0deg) scale(1.08);
+      box-shadow: 1px 1px 90px 1px rgb(145, 255, 0);
+    }
+
+    .content {
+      flex: 2;
+      padding: 20px;
+      animation: fadeInUp 1s ease-out;
+      max-width: 700px;
+    }
+
+    .content h2 {
+      font-size: 2.4rem;
+      background: linear-gradient(90deg, #00f9ff, #ff00cc);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .content h3 {
+      color: #ffd700;
+      margin-bottom: 15px;
+      font-size: 1.4rem;
+    }
+
+    .content p {
+      margin: 12px 0;
+      line-height: 1.7;
+      font-size: 1rem;
+    }
+
+    .content a {
+      color: #00f9ff;
+      text-decoration: none;
+    }
+
+    .resume-btn {
+      margin-top: 25px;
+      padding: 14px 36px;
+      background: linear-gradient(45deg, #ff00cc, #3333ff);
+      color: white;
+      font-weight: bold;
+      border: none;
+      border-radius: 30px;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      box-shadow: 0 0 20px rgba(255, 0, 255, 0.3);
+    }
+
+    .resume-btn:hover {
+      transform: scale(1.05);
+      box-shadow: 0 0 30px rgba(255, 255, 255, 0.5);
+    }
+
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .cursor {
+      width: 20px;
+      height: 20px;
+      border: 2px solid #00f9ff;
+      background: rgba(0, 255, 255, 0.1);
+      border-radius: 50%;
+      box-shadow: 0 0 20px rgba(0, 300, 300, 0.9),
+                  0 0 40px rgba(0, 300, 300, 0.9),
+                  0 0 60px rgba(0, 300, 300, 0.9);
+      position: fixed;
+      transform: translate(-50%, -50%);
+      pointer-events: none;
+      z-index: 9999;
+      transition: transform 0.15s ease, background 0.2s ease, border 0.2s ease;
+    }
+
+    #bg-3d {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      z-index: -1;
+    }
+
+      footer {
+      background: #111;
+      text-align: center;
+      padding: 2rem 1rem;
+      margin-top: auto;
+    }
+    footer p {
+      color: #bbb;
+      margin-bottom: 1rem;
+    }
+    footer a {
+      color: #00f7ff;
+      text-decoration: none;
+      margin: 0 10px;
+      font-weight: 500;
+    }
+    footer a:hover {
+      color: #ff00c8;
+    }
+
+    @media (max-width: 768px) {
+      .container {
+        flex-direction: column;
+        text-align: center;
+      }
+      .content {
+        padding-top: 30px;
+      }
+    .navbar ul {
+        position: absolute;
+        top: 70px;
+        left: 0;
+        width: 100%;
+        flex-direction: column;
+        background: #0a0a2a;
+        display: none;
+        text-align: center;
+        padding: 1rem 0;
+        z-index: 9;
+      }
+      .navbar ul.show {
+        display: flex;
+      }
+      .navbar li {
+        margin: 10px 0;
+      }
+      .menu-toggle {
+        display: flex;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- 3D Background -->
+  <canvas id="bg-3d"></canvas>
+
+  <!-- Cursor -->
+  <div class="cursor" id="cursor"></div>
+ <!-- Header -->
+  <header class="navbar">
+    <div class="logo">🛠 Anthony Raj</div>
+    <div class="menu-toggle" id="menu-toggle">
+      <div></div>
+      <div></div>
+      <div></div>
+    </div>
+    <nav>
+      <ul id="nav-links">
+        <li><a  href="index.html">Home</a></li>
+        <li><a class="active" href="about.html">About</a></li>
+        <li><a href="skills.html">Skills</a></li>
+        <li><a href="education.html">Education</a></li>
+        <li><a href="project.html">Work</a></li>
+        <li><a href="experience.html">Experience</a></li>
+        <li><a href="contact.html">Contact</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <!-- About Me Section -->
+  <section class="text-center"></section>
+    <div class="flex items-center justify-center space-x-4 mb-4">
+      <span class="material-icons text-yellow-400 text-5xl glow-icon">
+        person
+      </span>
+      <h1 class="text-4xl md:text-5xl font-bold glow-text">
+        <span class="text-white">About</span>
+        <span class="bg-gradient-to-r from-cyan-400 via-blue-400 to-pink-400 text-transparent bg-clip-text">Me</span>
+      </h1>
+    </div>
+  </section>
+  <div class="container">
+    <div class="image-container">
+      <img src="hero.png" alt="Anthony Raj AI Image">
+    </div>
+    <div class="content">
+      <h2>I’m Anthony Raj</h2>
+      <h3>Software Engineer</h3>
+      <p>I’m a Web Developer based in Lucknow, India, with a passion for creating both static and dynamic websites. I love working with HTML, CSS, JavaScript, and PHP to build responsive, user-friendly web interfaces.</p>
+      <p>I’ve worked on everything from client portfolios and landing pages to dynamic CMS platforms with backend functionality using PHP and MySQL.</p>
+      <p>I’m always improving site performance, SEO, and constantly learning new technologies to enhance my dev skills.</p>
+      <p><strong>Email:</strong> <a href="mailto:antonio2002raj@gmail.com">antonio2002raj@gmail.com</a></p>
+      <p><strong>Place:</strong> Tamil Nadu, India - 605 702</p>
+      <button class="resume-btn">Resume</button>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer>
+    <p>&copy; 2025 Anthony Raj. All Rights Reserved.</p>
+    <div>
+      <a href="#">Privacy Policy</a>
+      <a href="#">Terms of Service</a>
+      <a href="#">Contact</a>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script>
+    // Custom Cursor Logic
+        const cursor = document.getElementById("cursor");
+        document.addEventListener("mousemove", (e) => {
+            cursor.style.left = `${e.clientX}px`;
+            cursor.style.top = `${e.clientY}px`;
+        });
+
+        // Cursor grow on hover
+        const hoverTargets = document.querySelectorAll("button, a, .skill-box"); // Added .skill-box to hover targets
+        hoverTargets.forEach(target => {
+            target.addEventListener("mouseenter", () => {
+                cursor.style.transform = "translate(-50%, -50%) scale(2)";
+                cursor.style.borderColor = "#ff00c8"; // Pink border on hover
+                cursor.style.background = "rgba(255, 0, 200, 0.1)"; // Pink background on hover
+            });
+            target.addEventListener("mouseleave", () => {
+                cursor.style.transform = "translate(-50%, -50%) scale(1)";
+                cursor.style.borderColor = "#00f9ff"; // Original border color
+                cursor.style.background = "rgba(0, 255, 255, 0.1)"; // Original background color
+            });
+        });
+
+    // THREE.js Moving Stars
+    const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(
+      75,
+      window.innerWidth / window.innerHeight,
+      0.1,
+      1000
+    );
+    const renderer = new THREE.WebGLRenderer({
+      canvas: document.getElementById("bg-3d"),
+      alpha: true,
+    });
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    camera.position.z = 5;
+
+    const stars = [];
+    const geometry = new THREE.SphereGeometry(0.05, 8, 8);
+
+    for (let i = 0; i < 500; i++) {
+      const material = new THREE.MeshBasicMaterial({
+        color: new THREE.Color(`hsl(${Math.random() * 360}, 100%, 70%)`)
+      });
+      const star = new THREE.Mesh(geometry, material);
+      resetStar(star);
+      scene.add(star);
+      stars.push(star);
+    }
+
+    function resetStar(star) {
+      star.position.x = (Math.random() - 0.5) * 100;
+      star.position.y = (Math.random() - 0.5) * 100;
+      star.position.z = -Math.random() * 100;
+    }
+
+    function animate() {
+      requestAnimationFrame(animate);
+      stars.forEach((star) => {
+        star.position.z += 0.7;
+        if (star.position.z > camera.position.z) {
+          resetStar(star);
+        }
+      });
+      renderer.render(scene, camera);
+    }
+
+    animate();
+
+    window.addEventListener("resize", () => {
+      camera.aspect = window.innerWidth / window.innerHeight;
+      camera.updateProjectionMatrix();
+      renderer.setSize(window.innerWidth, window.innerHeight);
+    });
+
+
+    // Toggle Mobile Menu
+    const menuToggle = document.getElementById('menu-toggle');
+    const navLinks = document.getElementById('nav-links');
+    menuToggle.addEventListener('click', () => {
+      navLinks.classList.toggle('show');
+    });
+  </script>
+</body>
+</html>

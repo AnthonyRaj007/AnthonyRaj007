@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>My Skills & Abilities - Dynamic Showcase</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdn.jsdelivr.net/gh/devicons/devicon@v2.15.1/devicon.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" xintegrity="sha512-Fo3rlalHpgZ4F/k2a4x1E7N3Lg4pXl/J5v0L22J/3+6N5F5n2E4M5A5P4B1c/lD5x1I1x2F3G1Q8g3T0S9H4A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700;800&display=swap');
+
+        body {
+            margin: 0;
+            overflow-x: hidden; /* Prevent horizontal scroll due to animations */
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(289deg, #0a0a0a, #1a1a1a, #2a2a2a); /* Consistent dark background */
+            color: #e0e0e0;
+            cursor: none;
+            display: flex; /* Use flexbox for overall page layout */
+            flex-direction: column; /* Stack children vertically */
+            min-height: 100vh; /* Ensure body takes full viewport height */
+            position: relative; /* For z-indexing the background */
+        }
+
+        #bg-3d {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: -2; /* Background elements */
+            filter: blur(1px); /* Slightly less blur for clearer stars */
+            opacity: 0.8; /* Slightly more opaque stars */
+        }
+
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 2rem;
+            background: rgb(60 93 87 / 35%);
+            backdrop-filter: blur(8px);
+            position: sticky; /* Stays at the top */
+            top: 0;
+            z-index: 10;
+        }
+        .navbar .logo {
+            font-size: 1.6rem;
+            font-weight: bold;
+            color: #00ffe7;
+        }
+        .navbar ul {
+            list-style: none;
+            display: flex;
+            margin: 0; /* Remove default ul margin */
+            padding: 0; /* Remove default ul padding */
+        }
+        .navbar li {
+            margin-left: 20px;
+        }
+        .navbar a {
+            text-decoration: none;
+            color: #e0f7fa;
+            font-weight: 500;
+            transition: 0.3s;
+            border-bottom: 2px solid transparent;
+        }
+        .navbar a.active,
+        .navbar a:hover {
+            color: #00ffe7; /* Changed hover color to match logo */
+            border-color: #00ffe7; /* Changed border color to match logo */
+        }
+
+        .menu-toggle {
+            display: none;
+            flex-direction: column;
+            cursor: pointer;
+        }
+        .menu-toggle div {
+            width: 25px;
+            height: 3px;
+            background: #00ffe7;
+            margin: 4px 0;
+            transition: 0.3s;
+        }
+
+        .cursor {
+            width: 20px;
+            height: 20px;
+            border: 2px solid #00f9ff;
+            background: rgba(0, 255, 255, 0.1);
+            border-radius: 50%;
+            box-shadow: 0 0 20px rgba(0, 300, 300, 0.9),
+                        0 0 40px rgba(0, 300, 300, 0.9),
+                        0 0 60px rgba(0, 300, 300, 0.9);
+            position: fixed;
+            transform: translate(-50%, -50%);
+            pointer-events: none;
+            z-index: 9999;
+            transition: transform 0.15s ease, background 0.2s ease, border 0.2s ease;
+        }
+
+        main {
+            flex-grow: 1; /* Allows main content to take up available space */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center; /* Center content vertically and horizontally within main */
+            padding: 2rem 1rem; /* Add some padding around the main content */
+            width: 100%; /* Ensure main takes full width */
+        }
+
+        .skills-container {
+            position: relative;
+            z-index: 1; /* Content above background */
+            padding: 2.5rem; /* Equivalent to p-10 */
+            border-radius: 1.5rem; /* Equivalent to rounded-xl */
+            background-color: rgba(255, 255, 255, 0.05); /* More transparent white for stronger glassmorphism */
+            backdrop-filter: blur(20px) saturate(180%); /* Stronger Glassmorphism Blur and saturation */
+            -webkit-backdrop-filter: blur(20px) saturate(180%); /* For Safari */
+            border: 1px solid rgba(255, 255, 255, 0.1); /* Subtle border */
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5); /* Deeper shadow */
+            animation: fadeInScale 1s ease-out forwards; /* Fade in and scale for the container */
+            opacity: 0;
+            transform: scale(0.95);
+        }
+
+        @keyframes fadeInScale {
+            0% { opacity: 0; transform: scale(0.95); }
+            100% { opacity: 1; transform: scale(1); }
+        }
+
+        .skill-box {
+            background-color: rgba(0, 0, 0, 0.2); /* Darker semi-transparent background */
+            padding: 1.5rem; /* More padding */
+            border-radius: 0.75rem; /* Rounded corners */
+            text-align: center;
+            transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1); /* Smoother transition */
+            transform-style: preserve-3d; /* Enable 3D transforms */
+            border: 1px solid rgba(255, 255, 255, 0.08); /* Even subtler border */
+            position: relative;
+            overflow: hidden;
+            cursor: pointer; /* Indicate interactivity */
+        }
+
+        .skill-box:hover {
+            transform: translateY(-12px) scale(1.06) rotateX(5deg) rotateY(2deg); /* Lift, scale, and more pronounced 3D rotation */
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6); /* Enhanced shadow on hover */
+            border-color: rgba(129, 140, 248, 0.8); /* Tailwind indigo-300 equivalent for a brighter highlight */
+            background-color: rgba(0, 0, 0, 0.4); /* Slightly darker on hover */
+        }
+
+        .skill-box::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(79, 70, 229, 0.15), rgba(234, 88, 12, 0.15)); /* More vibrant gradient overlay */
+            opacity: 0;
+            transition: opacity 0.4s ease;
+            z-index: -1;
+        }
+
+        .skill-box:hover::before {
+            opacity: 1; /* Show gradient overlay on hover */
+        }
+
+        .skill-box i {
+            font-size: 3.8rem; /* Even larger icons */
+            margin-bottom: 0.8rem; /* Spacing below icon */
+            filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.2)); /* Subtle glow for icons */
+        }
+
+        .skill-box img {
+            height: 3.8rem; /* Match icon size */
+            width: auto;
+            margin: 0 auto 0.8rem auto; /* Center and add spacing */
+            filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.2)); /* Subtle glow for custom icons */
+        }
+
+        .skill-box p {
+            font-size: 1.05rem; /* Slightly larger text */
+            font-weight: 700; /* Bold text */
+            color: #e2e8f0; /* Tailwind slate-200 for text */
+            text-shadow: 0 0 5px rgba(0,0,0,0.3); /* Subtle text shadow */
+        }
+
+        /* Initial card animation */
+        @keyframes popIn {
+            0% {
+                opacity: 0;
+                transform: scale(0.8) translateY(20px);
+            }
+            80% {
+                transform: scale(1.02) translateY(-5px);
+            }
+            100% {
+                opacity: 1;
+                transform: scale(1) translateY(0);
+            }
+        }
+
+        .skill-box {
+            animation: popIn 0.6s ease-out forwards;
+            opacity: 0; /* Start hidden */
+        }
+
+        .page-title {
+            text-shadow: 0 0 15px rgba(129, 140, 248, 0.7), 0 0 30px rgba(79, 70, 229, 0.5); /* Glowing text shadow */
+            animation: titleGlow 2s infinite alternate;
+        }
+
+        @keyframes titleGlow {
+            0% { text-shadow: 0 0 10px rgba(129, 140, 248, 0.7), 0 0 20px rgba(79, 70, 229, 0.5); }
+            100% { text-shadow: 0 0 20px rgba(129, 140, 248, 1), 0 0 40px rgba(79, 70, 229, 0.8); }
+        }
+
+        footer {
+            background: #111;
+            text-align: center;
+            padding: 2rem 1rem;
+            margin-top: auto; /* Pushes footer to the bottom */
+        }
+        footer p {
+            color: #bbb;
+            margin-bottom: 1rem;
+        }
+        footer a {
+            color: #00f7ff;
+            text-decoration: none;
+            margin: 0 10px;
+            font-weight: 500;
+        }
+        footer a:hover {
+            color: #ff00c8;
+        }
+
+        @media (max-width: 768px) {
+            .navbar ul {
+                position: absolute;
+                top: 70px;
+                left: 0;
+                width: 100%;
+                flex-direction: column;
+                background: #0a0a2a;
+                display: none;
+                text-align: center;
+                padding: 1rem 0;
+                z-index: 9;
+            }
+            .navbar ul.show {
+                display: flex;
+            }
+            .navbar li {
+                margin: 10px 0;
+            }
+            .menu-toggle {
+                display: flex;
+            }
+            /* Adjust main content padding for smaller screens */
+            main {
+                padding: 1rem;
+            }
+            .skills-container {
+                padding: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <canvas id="bg-3d"></canvas>
+
+    <div class="cursor" id="cursor"></div>
+
+    <header class="navbar">
+        <div class="logo">🛠 Anthony Raj</div>
+        <div class="menu-toggle" id="menu-toggle">
+            <div></div>
+            <div></div>
+            <div></div>
+        </div>
+        <nav>
+            <ul id="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="about.html">About</a></li>
+                <li><a class="active" href="skills.html">Skills</a></li> <li><a href="education.html">Education</a></li>
+                <li><a href="project.html">Work</a></li>
+                <li><a href="experience.html">Experience</a></li>
+                <li><a href="contact.html">Contact</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <div class="max-w-6xl w-full">
+            <h2 class="text-center text-4xl md:text-5xl font-extrabold mb-12 relative z-10 leading-tight page-title">
+                <i class="fas fa-code text-indigo-400 mr-3"></i>
+                My <span class="text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 to-orange-500">Skills &</span>
+                <span class="text-transparent bg-clip-text bg-gradient-to-r from-teal-400 to-cyan-500">Abilities</span>
+            </h2>
+
+            <div class="skills-container grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-6">
+
+                <div class="skill-box" data-skill="ReactJS"><i class="devicon-react-original colored"></i><p>ReactJS</p></div>
+                <div class="skill-box" data-skill="ExpressJS"><i class="devicon-express-original colored"></i><p>ExpressJS</p></div>
+                <div class="skill-box" data-skill="NodeJS"><i class="devicon-nodejs-plain colored"></i><p>NodeJS</p></div>
+                <div class="skill-box" data-skill="Redux"><i class="devicon-redux-original colored"></i><p>Redux</p></div>
+                <div class="skill-box" data-skill="Firebase"><i class="devicon-firebase-plain colored"></i><p>Firebase</p></div>
+                <div class="skill-box" data-skill="Android"><i class="devicon-android-plain colored"></i><p>Android</p></div>
+
+                <div class="skill-box" data-skill="MaterialUI">
+                    <img src="https://img.icons8.com/ios-filled/50/ffffff/material-ui.png" onerror="this.onerror=null;this.src='https://placehold.co/56x56/000000/FFFFFF?text=MUI';" class="h-14 mx-auto" alt="MaterialUI" />
+                    <p>MaterialUI</p>
+                </div>
+                <div class="skill-box" data-skill="ChakraUI">
+                    <img src="https://img.icons8.com/external-tal-revivo-filled-tal-revivo/48/ffffff/external-chakra-ui-a-simple-modular-and-accessible-component-library-for-react-logo-filled-tal-revivo.png" onerror="this.onerror=null;this.src='https://placehold.co/56x56/000000/FFFFFF?text=CHUI';" class="h-14 mx-auto" alt="ChakraUI" />
+                    <p>ChakraUI</p>
+                </div>
+                <div class="skill-box" data-skill="TailwindCSS"><i class="devicon-tailwindcss-plain colored"></i><p>TailwindCSS</p></div>
+                <div class="skill-box" data-skill="Bootstrap"><i class="devicon-bootstrap-plain colored"></i><p>Bootstrap</p></div>
+                <div class="skill-box" data-skill="Sass"><i class="devicon-sass-original colored"></i><p>Sass</p></div>
+                <div class="skill-box" data-skill="HTML5"><i class="devicon-html5-plain colored"></i><p>HTML5</p></div>
+
+                <div class="skill-box" data-skill="CSS3"><i class="devicon-css3-plain colored"></i><p>CSS3</p></div>
+                <div class="skill-box" data-skill="JavaScript"><i class="devicon-javascript-plain colored"></i><p>JavaScript</p></div>
+                <div class="skill-box" data-skill="Java"><i class="devicon-java-plain colored"></i><p>Java</p></div>
+                <div class="skill-box" data-skill="Kotlin"><i class="devicon-kotlin-plain colored"></i><p>Kotlin</p></div>
+                <div class="skill-box" data-skill="PHP"><i class="devicon-php-plain colored"></i><p>PHP</p></div>
+                <div class="skill-box" data-skill="Python"><i class="devicon-python-plain colored"></i><p>Python</p></div>
+
+                <div class="skill-box"><i class="devicon-netlify-plain colored"></i><p>Netlify</p></div>
+                <div class="skill-box"><i class="devicon-digitalocean-plain colored"></i><p>DigitalOcean</p></div>
+                <div class="skill-box"><i class="devicon-jquery-plain colored"></i><p>JQuery</p></div>
+                <div class="skill-box"><i class="devicon-git-plain colored"></i><p>Git VCS</p></div>
+                <div class="skill-box"><i class="devicon-github-original colored"></i><p>GitHub</p></div>
+                <div class="skill-box"><i class="devicon-wordpress-plain colored"></i><p>WordPress</p></div>
+
+                <div class="skill-box" data-skill="C++"><i class="devicon-cplusplus-plain colored"></i><p>C++</p></div>
+                <div class="skill-box" data-skill="MongoDB"><i class="devicon-mongodb-plain colored"></i><p>MongoDB</p></div>
+                <div class="skill-box" data-skill="MySQL"><i class="devicon-mysql-plain colored"></i><p>MySQL</p></div>
+                <div class="skill-box" data-skill="PostgreSQL"><i class="devicon-postgresql-plain colored"></i><p>PostgreSQL</p></div>
+                <div class="skill-box" data-skill="AWS"><i class="devicon-amazonwebservices-original colored"></i><p>AWS</p></div>
+                <div class="skill-box" data-skill="Heroku"><i class="devicon-heroku-original colored"></i><p>Heroku</p></div>
+
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; 2025 Anthony Raj. All Rights Reserved.</p>
+        <div>
+            <a href="#">Privacy Policy</a>
+            <a href="#">Terms of Service</a>
+            <a href="#">Contact</a>
+        </div>
+    </footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script>
+        // Custom Cursor Logic
+        const cursor = document.getElementById("cursor");
+        document.addEventListener("mousemove", (e) => {
+            cursor.style.left = `${e.clientX}px`;
+            cursor.style.top = `${e.clientY}px`;
+        });
+
+        // Cursor grow on hover
+        const hoverTargets = document.querySelectorAll("button, a, .skill-box"); // Added .skill-box to hover targets
+        hoverTargets.forEach(target => {
+            target.addEventListener("mouseenter", () => {
+                cursor.style.transform = "translate(-50%, -50%) scale(2)";
+                cursor.style.borderColor = "#ff00c8"; // Pink border on hover
+                cursor.style.background = "rgba(255, 0, 200, 0.1)"; // Pink background on hover
+            });
+            target.addEventListener("mouseleave", () => {
+                cursor.style.transform = "translate(-50%, -50%) scale(1)";
+                cursor.style.borderColor = "#00f9ff"; // Original border color
+                cursor.style.background = "rgba(0, 255, 255, 0.1)"; // Original background color
+            });
+        });
+
+        // --- Three.js 3D Background - Dynamic Starfield ---
+        const scene = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        const renderer = new THREE.WebGLRenderer({ canvas: document.getElementById('bg-3d'), alpha: true, antialias: true });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        camera.position.z = 5; // Start closer to the stars
+
+        const stars = [];
+        const numStars = 1000; // More stars for a denser field
+        const starGeometry = new THREE.SphereGeometry(0.08, 24, 24); // Smaller stars
+
+        for (let i = 0; i < numStars; i++) {
+            const hue = Math.random() * 360;
+            const saturation = 80 + Math.random() * 20; // Brighter saturation
+            const lightness = 60 + Math.random() * 30; // Brighter lightness
+            const material = new THREE.MeshBasicMaterial({ color: `hsl(${hue}, ${saturation}%, ${lightness}%)` });
+            const star = new THREE.Mesh(starGeometry, material);
+
+            // Distribute stars in a larger volume
+            star.position.set(
+                (Math.random() - 0.5) * 100, // Wider spread
+                (Math.random() - 0.5) * 100,
+                (Math.random() - 0.5) * 100
+            );
+            star.originalZ = star.position.z; // Store original Z for reset
+
+            // Add a slight random rotation for twinkling effect
+            star.rotation.x = Math.random() * Math.PI;
+            star.rotation.y = Math.random() * Math.PI;
+            star.rotation.z = Math.random() * Math.PI;
+
+            scene.add(star);
+            stars.push(star);
+        }
+
+        // Add a few larger, slower-moving "distant objects"
+        const distantObjects = [];
+        const numDistantObjects = 5;
+        const distantObjectGeometry = new THREE.SphereGeometry(1.5, 32, 32); // Larger spheres
+        const distantObjectColors = [0x8a2be2, 0x4169e1, 0xffd700, 0x00ced1, 0xff6347]; // Violet, RoyalBlue, Gold, DarkTurquoise, Tomato
+
+        for (let i = 0; i < numDistantObjects; i++) {
+            const material = new THREE.MeshBasicMaterial({ color: distantObjectColors[i % distantObjectColors.length], transparent: true, opacity: 0.7 });
+            const obj = new THREE.Mesh(distantObjectGeometry, material);
+
+            obj.position.set(
+                (Math.random() - 0.5) * 200,
+                (Math.random() - 0.5) * 200,
+                (Math.random() - 0.5) * 200 - 150 // Place them further back
+            );
+            obj.originalZ = obj.position.z;
+            obj.velocityZ = (Math.random() * 0.02 + 0.01); // Slower movement
+            scene.add(obj);
+            distantObjects.push(obj);
+        }
+
+
+        // Mouse interaction for camera rotation
+        let mouseX = 0, mouseY = 0;
+        const windowHalfX = window.innerWidth / 2;
+        const windowHalfY = window.innerHeight / 2;
+
+        document.addEventListener('mousemove', (event) => {
+            mouseX = (event.clientX - windowHalfX) / 100; // Adjust sensitivity
+            mouseY = (event.clientY - windowHalfY) / 100;
+        });
+
+        function animateStars() {
+            requestAnimationFrame(animateStars);
+
+            // Smoothly move camera based on mouse position
+            camera.rotation.y += (mouseX - camera.rotation.y) * 0.02;
+            camera.rotation.x += (-mouseY - camera.rotation.x) * 0.02;
+
+            // Simulate forward movement by moving stars towards the camera
+            stars.forEach(star => {
+                star.position.z += 0.2; // Speed of stars moving forward
+                if (star.position.z > camera.position.z) {
+                    star.position.z = camera.position.z - 95; // Reset star to far back
+                    star.position.x = (Math.random() - 0.5) * 100; // Randomize X and Y when reset
+                    star.position.y = (Math.random() - 0.5) * 100;
+                }
+                // Add subtle rotation for twinkling effect
+                star.rotation.x += 0.005;
+                star.rotation.y += 0.005;
+            });
+
+            // Animate distant objects
+            distantObjects.forEach(obj => {
+                obj.position.z += obj.velocityZ;
+                if (obj.position.z > camera.position.z + 20) { // Reset when they pass the camera
+                    obj.position.z = camera.position.z - 200; // Reset far back
+                    obj.position.x = (Math.random() - 0.5) * 200;
+                    obj.position.y = (Math.random() - 0.5) * 200;
+                }
+                obj.rotation.y += 0.001; // Slow rotation
+            });
+
+            renderer.render(scene, camera);
+        }
+
+        window.onload = function () {
+            animateStars(); // Start the animation on window load.
+        }
+
+        window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        });
+
+        // --- Skill Card Animations ---
+        const skillBoxes = document.querySelectorAll('.skill-box');
+
+        // Stagger animation for skill boxes on load
+        skillBoxes.forEach((box, index) => {
+            box.style.animationDelay = `${0.1 + (index * 0.03)}s`; // Stagger by 30ms
+        });
+
+        // Toggle Mobile Menu
+        const menuToggle = document.getElementById('menu-toggle');
+        const navLinks = document.getElementById('nav-links');
+        menuToggle.addEventListener('click', () => {
+            navLinks.classList.toggle('show');
+        });
+
+        // Close mobile menu when a link is clicked
+        navLinks.querySelectorAll('a').forEach(link => {
+            link.addEventListener('click', () => {
+                if (navLinks.classList.contains('show')) {
+                    navLinks.classList.remove('show');
+                }
+            });
+        });
+    </script>
+
+</body>
+</html>
